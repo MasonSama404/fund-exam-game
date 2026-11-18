@@ -897,7 +897,7 @@
 
     syncSettingsUI() {
       document.getElementById("set-sound-btn").textContent = this.save.sound ? "🔊 已开启" : "🔇 已静音";
-      document.getElementById("set-theme-btn").textContent = this.save.theme === "night" ? "🌃 夜幕陆家嘴" : "🌅 晨曦外滩";
+      document.getElementById("set-theme-btn").textContent = this.save.theme === "night" ? "🌃 黑金霓虹·街机" : "🌅 暗金流光·外滩";
       document.getElementById("set-unlock-btn").textContent = this.save.freeUnlock ? "🔓 全部26层可自由选关" : "🔒 按章节闯关解锁";
     }
 
