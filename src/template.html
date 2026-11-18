@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#060b19" />
+  <title>公募帝国：26层摩天楼｜基金从业资格模拟经营游戏</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b132b'/%3E%3Cpath d='M20 54V16l12-6 12 6v38H20z' fill='%23f59e0b'/%3E%3Cpath d='M25 22h5v5h-5zm9 0h5v5h-5zm-9 9h5v5h-5zm9 0h5v5h-5zm-9 9h5v5h-5zm9 0h5v5h-5z' fill='%230b132b'/%3E%3C/svg%3E" />
+  <style>
+/*__INLINE_CSS__*/
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+
+  <div id="app">
+    <div class="game-shell">
+
+      <!-- ==================== 1. PURE GAME TITLE SCREEN ==================== -->
+      <section id="screen-title" class="screen active">
+        <div class="title-top-bar">
+          <span class="version-tag">🏛️ FUND EMPIRE · 26F TYCOON</span>
+          <button id="btn-title-sound" class="g-btn g-btn-sm">🔊 音效: 开</button>
+        </div>
+
+        <div class="title-hero">
+          <div class="emblem-badge">✨ 金融模拟经营 × 26章最新考纲闯关</div>
+          <h1 class="game-logo">公募帝国</h1>
+          <p class="game-subtitle">26 层 摩 天 楼 · 执 业 生 涯 篇</p>
+          <div id="title-career-pill" class="career-hud-pill">
+            <span>🏢 已竣工 <b>0/26层</b></span>
+            <span>💰 峰值规模 <b>¥0.50亿</b></span>
+            <span>⭐ 金牛星章 <b>0/78</b></span>
+          </div>
+
+          <nav class="title-menu" aria-label="游戏主菜单">
+            <button id="btn-start-career" class="g-btn g-btn-gold">▶ 开始执业生涯</button>
+            <button id="btn-open-map" class="g-btn">🗺 摩天楼选关 (26层)</button>
+            <button id="btn-open-codex" class="g-btn">📖 考纲图鉴 & 错题本</button>
+            <button id="btn-open-settings" class="g-btn">⚙ 游戏设置 & 存档</button>
+          </nav>
+        </div>
+
+        <div class="title-footer">
+          科目一《基金法律法规》1F–8F ｜ 科目二《证券投资基金基础知识》9F–26F
+        </div>
+      </section>
+
+      <!-- ==================== 2. 26-FLOOR LEVEL SELECT SCREEN ==================== -->
+      <section id="screen-map" class="screen">
+        <header class="hud-bar">
+          <div class="hud-left">
+            <button id="btn-map-home" class="g-btn g-btn-sm">◀<span class="hide-mobile"> 主菜单</span></button>
+            <div class="act-tabs">
+              <button id="tab-act1" class="act-tab active">🛡️ 科目一<span class="hide-mobile">·基座</span> (1-8F)</button>
+              <button id="tab-act2" class="act-tab">📈 科目二<span class="hide-mobile">·中枢</span> (9-26F)</button>
+            </div>
+          </div>
+          <div class="hud-right">
+            <button id="btn-free-unlock" class="g-btn g-btn-sm">🔒 闯关</button>
+            <span id="map-star-badge" class="version-tag">⭐ 0/78</span>
+          </div>
+        </header>
+
+        <div id="map-subzone" class="subzone-bar">
+          <button id="sub-p0" class="g-btn g-btn-sm g-btn-gold">🏢 09F–17F 中低区<span class="hide-mobile">（投资工具与组合）</span></button>
+          <button id="sub-p1" class="g-btn g-btn-sm">🏙️ 18F–26F 高区<span class="hide-mobile">（交易估值与销售）</span></button>
+        </div>
+
+        <div id="map-grid" class="map-grid-wrap map-grid-act1"></div>
+      </section>
+
+      <!-- ==================== 3. CORE SIMULATION PLAY STAGE ==================== -->
+      <section id="screen-play" class="screen">
+        <header class="hud-bar">
+          <div class="hud-left">
+            <button id="btn-play-back" class="g-btn g-btn-sm">◀<span class="hide-mobile"> 选关</span></button>
+            <div style="min-width:0">
+              <div id="play-floor-title" style="font-size:13px;font-weight:900;color:var(--gold-bright);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">01F · 资管战略厅</div>
+              <div id="play-chap-sub" class="hide-mobile" style="font-size:10.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">科目一 · 第1章</div>
+            </div>
+          </div>
+
+          <div class="hud-right metrics-strip">
+            <div class="metric-chip" title="当前基金管理规模">💰 <span class="hide-mobile">规模</span> <b id="hud-aum" style="color:#fbbf24">¥0.50亿</b></div>
+            <div class="metric-chip" title="基金单位份额净值">📈 <span class="hide-mobile">净值</span> <b id="hud-nav">1.0000</b></div>
+            <div class="metric-chip" title="监管合规护盾（归零停业整顿）">🛡️ <span class="hide-mobile">合规</span> <b id="hud-comp">85</b></div>
+            <button id="btn-play-cheat" class="g-btn g-btn-sm g-btn-cyan">📘<span class="hide-mobile"> 秘籍</span></button>
+          </div>
+        </header>
+
+        <div class="play-body">
+          <!-- Left / Top: Live Animated Skyscraper Floor Cutaway -->
+          <div class="tower-pane">
+            <div class="canvas-box">
+              <canvas id="floor-canvas"></canvas>
+            </div>
+            <div class="aum-progress-box">
+              <div class="aum-progress-top">
+                <span>🏆 二星规模目标进度</span>
+                <span id="aum-bar-label">¥0.50亿 / 目标 ¥0.90亿</span>
+              </div>
+              <div class="progress-track">
+                <div id="aum-bar-fill" class="progress-fill" style="width:55%"></div>
+              </div>
+            </div>
+            <div class="stance-bar">
+              <button id="stance-safe" class="stance-btn">
+                🛡️ 稳健合规
+                <small>违规扣盾减半</small>
+              </button>
+              <button id="stance-growth" class="stance-btn">
+                🚀 规模冲刺
+                <small>AUM增幅×1.32</small>
+              </button>
+              <button id="btn-use-hint" class="stance-btn hint-btn">
+                🔍 投研内参
+                <small>排除1个错项</small>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right / Bottom: Executive Command & Order Terminal -->
+          <div id="command-pane" class="command-pane"></div>
+        </div>
+      </section>
+
+      <!-- ==================== 4. SYLLABUS CODEX & MISTAKE DRILL ==================== -->
+      <section id="screen-codex" class="screen">
+        <header class="hud-bar">
+          <div class="hud-left">
+            <button id="btn-codex-home" class="g-btn g-btn-sm">◀<span class="hide-mobile"> 主菜单</span></button>
+            <div class="act-tabs">
+              <button id="tab-codex-cards" class="act-tab active">📘 <span class="hide-mobile">26章</span>考纲图鉴</button>
+              <button id="tab-codex-mistakes" class="act-tab">🩹 错题特训 (0)</button>
+            </div>
+          </div>
+        </header>
+        <div id="codex-body" class="codex-layout"></div>
+      </section>
+
+      <!-- ==================== MODAL: CHAPTER CHEATSHEET ==================== -->
+      <div id="modal-cheat" class="modal-mask">
+        <div class="modal-card">
+          <div class="modal-head">
+            <span id="modal-cheat-title">📘 本章执业秘籍</span>
+            <button class="g-btn g-btn-sm" data-close-modal>✕ 关闭</button>
+          </div>
+          <div id="modal-cheat-list" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+      </div>
+
+      <!-- ==================== MODAL: GAME SETTINGS ==================== -->
+      <div id="modal-settings" class="modal-mask">
+        <div class="modal-card">
+          <div class="modal-head">
+            <span>⚙ 游戏设置 & 执业档案</span>
+            <button class="g-btn g-btn-sm" data-close-modal>✕ 关闭</button>
+          </div>
+          <div class="setting-row">
+            <span>🎵 游戏合成音效</span>
+            <button id="set-sound-btn" class="g-btn g-btn-sm">🔊 已开启</button>
+          </div>
+          <div class="setting-row">
+            <span>🌆 摩天楼天际线主题</span>
+            <button id="set-theme-btn" class="g-btn g-btn-sm">🌃 夜幕陆家嘴</button>
+          </div>
+          <div class="setting-row">
+            <span>🗺 选关解锁模式</span>
+            <button id="set-unlock-btn" class="g-btn g-btn-sm">🔒 按章节闯关解锁</button>
+          </div>
+          <div class="setting-row">
+            <span>🗑️ 清空本地建造进度</span>
+            <button id="set-reset-btn" class="g-btn g-btn-sm" style="color:#fca5a5;border-color:rgba(239,68,68,0.4)">重置存档</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+/*__INLINE_JS__*/
+  </script>
+</body>
+</html>
